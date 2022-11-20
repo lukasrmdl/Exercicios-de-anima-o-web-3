@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercicio 3 - animação com canvas</title>
+</head>
+<body>
+    <canvas width="600" height="400" style="border: 1px dotted #000"></canvas>
+</body>
+    <script>
+        const canvas = document.querySelector('canvas');
+        const ctx = canvas.getContext('2d');
+
+        function matrix(ctx, canvas) {
+            var c = "C田由甲申甴电甶男甸甹町画甼甽甾甿畀畁畂畃畄畅畆畇畈畉畊畋界畍畎畏畐畑";
+            c = c.split("");
+
+            var font_size = 20;
+            var columns = canvas.width / font_size; 
+            var drops = []; 
+            for(var x = 0; x < columns; x++)
+            drops[x] = 1; 
+
+            var possui = false; 
+            var tsi = []; 
+
+            function draw() {
+                ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = "#0F0";
+                ctx.font = font_size + "px arial";
+                
+
+                for(var i = 0; i < drops.length; i++) {
+
+                    var text = c[Math.floor(Math.random()*c.length)];
+                    
+                    if (possui == true) {
+
+                    let index = tsi.findIndex(val => val.posX == i*font_size);
+                    
+                    if (index != -1) {
+                        switch (tsi[index].count) {
+                        case 1 :
+                            text = 'S';
+                            tsi[index].count ++;
+                            break;
+                        case 2 :
+                            text = 'T';
+                            tsi[index].count ++;
+                            break;
+                        case 3 :
+                            text = 'S';
+                            tsi[index].count ++;
+                            break; 
+                        case 4 :
+                            text = 'I';
+                            tsi.splice(index, 1); 
+                        }  
+                    }
+                    }
+
+                    if (tsi.length == 0) {
+                    possui = false;
+                    }
+                    
+                    if (text == 'C') {
+                    tsi.push({'posX': i*font_size, 'count': 1});
+                    possui = true;
+                    }
+                    
+                    if ('C S T S I'.includes(text)) {
+                    ctx.fillStyle = "#FFF";
+                    } else {
+                    ctx.fillStyle = "#0F0";
+                    }
+
+                    ctx.fillText(text, i*font_size, drops[i]*font_size);
+
+                    if(drops[i]*font_size > canvas.height  && Math.random() > 0.975) {
+                    drops[i] = 0;
+                    }
+                    
+                    drops[i]++;
+                }
+            }
+            setInterval(draw, 30);
+        }
+        matrix(ctx, canvas);
+    </script>
+</html>
